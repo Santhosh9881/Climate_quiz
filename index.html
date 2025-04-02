@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Action Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+            padding: 20px;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background: #3498db;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .options button:hover {
+            background: #2980b9;
+        }
+        .hidden {
+            display: none;
+        }
+        .progress {
+            width: 100%;
+            background: #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .progress-bar {
+            height: 10px;
+            width: 0;
+            background: #2ecc71;
+            border-radius: 5px;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>🌍 Climate Action Awareness Quiz 🌱</h2>
+        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+        <div id="quizContent"></div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "What is the biggest contributor to global warming?", a: "Carbon Dioxide", options: ["Methane", "Carbon Dioxide", "Nitrous Oxide"] },
+            { q: "What is the main cause of deforestation?", a: "Agriculture", options: ["Agriculture", "Urbanization", "Logging"] },
+            { q: "Which renewable energy source is most widely used?", a: "Hydropower", options: ["Solar", "Wind", "Hydropower"] },
+            { q: "What percentage of Earth’s water is freshwater?", a: "3%", options: ["3%", "10%", "25%"] },
+            { q: "Which gas traps the most heat in Earth's atmosphere?", a: "Water Vapor", options: ["Carbon Dioxide", "Methane", "Water Vapor"] },
+            { q: "Which sector emits the most greenhouse gases globally?", a: "Energy", options: ["Agriculture", "Transportation", "Energy"] },
+            { q: "What is the goal of the Paris Agreement?", a: "Limit warming to below 2°C", options: ["Eliminate fossil fuels", "Limit warming to below 2°C", "Plant 1 billion trees"] },
+            { q: "Which country emits the most CO₂ annually?", a: "China", options: ["USA", "China", "India"] },
+            { q: "What is carbon footprint measured in?", a: "Tons of CO₂", options: ["Liters of fuel", "Tons of CO₂", "Kilowatts of energy"] },
+            { q: "What is a major impact of rising sea levels?", a: "Coastal flooding", options: ["More deserts", "Coastal flooding", "Longer winters"] }
+        ];
+
+        let currentQuestion = 0;
+
+        function loadQuestion() {
+            const quizContent = document.getElementById("quizContent");
+            const progressBar = document.getElementById("progressBar");
+            
+            if (currentQuestion >= questions.length) {
+                quizContent.innerHTML = `<h3>🎉 Quiz Completed! 🎉</h3><p>Thank you for participating!</p>`;
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            quizContent.innerHTML = `
+                <div class="question">${q.q}</div>
+                <div class="options">
+                    ${q.options.map(option => `<button onclick="checkAnswer('${option}')">${option}</button>`).join('')}
+                </div>
+            `;
+            
+            progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
+        }
+
+        function checkAnswer(answer) {
+            if (answer === questions[currentQuestion].a) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                alert("❌ Incorrect! Try again.");
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
