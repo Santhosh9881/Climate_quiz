@@ -1,115 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Climate Action Quiz</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            text-align: center;
-            padding: 20px;
-        }
-        .quiz-container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .question {
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-        .options button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: none;
-            border-radius: 5px;
-            background: #3498db;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .options button:hover {
-            background: #2980b9;
-        }
-        .hidden {
-            display: none;
-        }
-        .progress {
-            width: 100%;
-            background: #ddd;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
-        .progress-bar {
-            height: 10px;
-            width: 0;
-            background: #2ecc71;
-            border-radius: 5px;
-            transition: width 0.5s;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌎 Climate Action Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(120deg, #b2fefa, #0ed2f7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    #quiz-container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 800px;
+      animation: fadeIn 1.2s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      color: #1a1a1a;
+      margin-bottom: 1rem;
+    }
+    #question {
+      font-size: 1.6rem;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+    #options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .option-btn {
+      font-size: 1.1rem;
+      padding: 15px;
+      border-radius: 12px;
+      border: 2px solid #00b894;
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .option-btn:hover {
+      background-color: #00b894;
+      color: white;
+    }
+    .option-btn.correct {
+      background-color: #2ecc71 !important;
+      color: white;
+      border-color: #2ecc71;
+    }
+    .option-btn.wrong {
+      background-color: #e74c3c !important;
+      color: white;
+      border-color: #e74c3c;
+    }
+    .quiz-end {
+      font-size: 1.8rem;
+      text-align: center;
+      color: #27ae60;
+    }
+    .progress-bar {
+      height: 12px;
+      width: 100%;
+      background: #dff9fb;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+      width: 0;
+      transition: width 0.4s ease-in-out;
+    }
+  </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <h2>🌍 Climate Action Awareness Quiz 🌱</h2>
-        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
-        <div id="quizContent"></div>
-    </div>
+  <div id="quiz-container">
+    <h1>🌍 Climate Action Challenge</h1>
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+    <div id="question"></div>
+    <div id="options"></div>
+  </div>
 
-    <script>
-        const questions = [
-            { q: "What is the biggest contributor to global warming?", a: "Carbon Dioxide", options: ["Methane", "Carbon Dioxide", "Nitrous Oxide"] },
-            { q: "What is the main cause of deforestation?", a: "Agriculture", options: ["Agriculture", "Urbanization", "Logging"] },
-            { q: "Which renewable energy source is most widely used?", a: "Hydropower", options: ["Solar", "Wind", "Hydropower"] },
-            { q: "What percentage of Earth’s water is freshwater?", a: "3%", options: ["3%", "10%", "25%"] },
-            { q: "Which gas traps the most heat in Earth's atmosphere?", a: "Water Vapor", options: ["Carbon Dioxide", "Methane", "Water Vapor"] },
-            { q: "Which sector emits the most greenhouse gases globally?", a: "Energy", options: ["Agriculture", "Transportation", "Energy"] },
-            { q: "What is the goal of the Paris Agreement?", a: "Limit warming to below 2°C", options: ["Eliminate fossil fuels", "Limit warming to below 2°C", "Plant 1 billion trees"] },
-            { q: "Which country emits the most CO₂ annually?", a: "China", options: ["USA", "China", "India"] },
-            { q: "What is carbon footprint measured in?", a: "Tons of CO₂", options: ["Liters of fuel", "Tons of CO₂", "Kilowatts of energy"] },
-            { q: "What is a major impact of rising sea levels?", a: "Coastal flooding", options: ["More deserts", "Coastal flooding", "Longer winters"] }
-        ];
+  <script>
+    const questions = [
+      { question: "What does SDG 13 (Climate Action) aim to achieve?", options: ["End poverty", "Reduce inequalities", "Take urgent action to combat climate change and its impacts", "Promote gender equality"], answer: 2 },
+      { question: "Which greenhouse gas is the biggest contributor to global warming?", options: ["Methane (CH₄)", "Carbon Dioxide (CO₂)", "Nitrous Oxide (N₂O)", "Ozone (O₃)"], answer: 1 },
+      { question: "Which sector is the largest source of global CO₂ emissions?", options: ["Transportation", "Agriculture", "Energy Production", "Manufacturing"], answer: 2 },
+      { question: "What is the main goal of the Paris Agreement?", options: ["To promote recycling programs", "To limit global warming to well below 2°C, ideally 1.5°C", "To ban fossil fuels immediately", "To plant one trillion trees worldwide"], answer: 1 },
+      { question: "What is 'carbon neutrality'?", options: ["A state where no CO₂ is produced at all", "Balancing emitted CO₂ with carbon removal efforts", "Reducing CO₂ emissions by 10%", "Stopping the use of fossil fuels"], answer: 1 },
+      { question: "Which of the following is a carbon sink?", options: ["Deserts", "Oceans", "Cement factories", "Urban areas"], answer: 1 },
+      { question: "What is the key focus area of the Tamil Nadu Climate Change Mission?", options: ["Increasing coal-based power plants", "Promoting climate-resilient agriculture", "Reducing employment in the renewable energy sector", "Expanding highways"], answer: 1 },
+      { question: "What is the total budget allocated for the Tamil Nadu Climate Change Mission?", options: ["100 crores", "250 crores", "500 crores", "1000 crores"], answer: 2 },
+      { question: "What is the main goal of Carbon Capture and Storage (CCS)?", options: ["Convert carbon dioxide into oxygen", "Store carbon dioxide underground to reduce emissions", "Increase carbon emissions to boost plant growth", "Release carbon dioxide into the ocean"], answer: 1 },
+      { question: "Which country will host both the Earthshot Prize 2025 and COP30 UN Climate Summit?", options: ["India", "Brazil", "Canada", "Australia"], answer: 1 },
+      { question: "What is the predicted probability of a neutral ENSO event in 2025?", options: ["35.4%", "50.2%", "69.6%", "88.1%"], answer: 2 },
+      { question: "Who is the chair of the Africa group of climate negotiators?", options: ["Kofi Annan", "Ali Mohamed", "Wanijira Mathai", "Mohamed Adow"], answer: 1 },
+      { question: "When is the ozone layer over Antarctica expected to fully recover?", options: ["2030", "2045", "2066", "2100"], answer: 2 },
+      { question: "What is the function of the ozone layer?", options: ["Absorbs infrared radiation", "Blocks visible light", "Absorbs harmful UV radiation", "Emits greenhouse gases"], answer: 2 },
+      { question: "Which country is a leader in Carbon Capture Tech?", options: ["Brazil", "Norway", "Kenya", "United States"], answer: 1 },
+    ];
 
-        let currentQuestion = 0;
+    let current = 0;
 
-        function loadQuestion() {
-            const quizContent = document.getElementById("quizContent");
-            const progressBar = document.getElementById("progressBar");
-            
-            if (currentQuestion >= questions.length) {
-                quizContent.innerHTML = `<h3>🎉 Quiz Completed! 🎉</h3><p>Thank you for participating!</p>`;
-                return;
-            }
+    function loadQuestion() {
+      if (current < questions.length) {
+        const q = questions[current];
+        document.getElementById("question").innerText = `${current + 1}. ${q.question}`;
+        const options = document.getElementById("options");
+        options.innerHTML = "";
+        document.getElementById("progress").style.width = `${(current / questions.length) * 100}%`;
 
-            const q = questions[currentQuestion];
-            quizContent.innerHTML = `
-                <div class="question">${q.q}</div>
-                <div class="options">
-                    ${q.options.map(option => `<button onclick="checkAnswer('${option}')">${option}</button>`).join('')}
-                </div>
-            `;
-            
-            progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
-        }
+        q.options.forEach((opt, i) => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn";
+          btn.textContent = opt;
+          btn.onclick = () => checkAnswer(i, btn);
+          options.appendChild(btn);
+        });
+      } else {
+        document.getElementById("quiz-container").innerHTML = `
+          <h2 class='quiz-end'>🎉 You completed the quiz!</h2>
+          <p style='text-align:center;'>Thanks for learning about Climate Action!</p>
+        `;
+      }
+    }
 
-        function checkAnswer(answer) {
-            if (answer === questions[currentQuestion].a) {
-                currentQuestion++;
-                loadQuestion();
-            } else {
-                alert("❌ Incorrect! Try again.");
-            }
-        }
+    function checkAnswer(i, btn) {
+      const correct = questions[current].answer;
+      if (i === correct) {
+        btn.classList.add("correct");
+        setTimeout(() => {
+          current++;
+          loadQuestion();
+        }, 800);
+      } else {
+        btn.classList.add("wrong");
+        setTimeout(() => btn.classList.remove("wrong"), 800);
+      }
+    }
 
-        loadQuestion();
-    </script>
+    document.addEventListener("DOMContentLoaded", loadQuestion);
+  </script>
 </body>
 </html>
